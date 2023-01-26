@@ -1,31 +1,32 @@
-#include<GL/freeglut.h>
-#include<GL/glew.h>
+#include<GL/gl.h>
+#include <GLFW/glfw3.h>
 
-static void RenderSceneCB()
+int main()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glutSwapBuffers();
-}
+    GLFWwindow* window;
+    if (!glfwInit())
+        return -1;
+    window = glfwCreateWindow(640, 480, "Main", NULL, NULL);
+    if (!window)
+    {
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
 
-static void InitializeGlutCallbacks()
-{
-    glutDisplayFunc(RenderSceneCB);
-}
+    while (!glfwWindowShouldClose(window))
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        glBegin(GL_TRIANGLES);
+        glVertex2f(-0.5f, -0.5f);
+        glVertex2f(0.0f, 0.5f);
+        glVertex2f(0.5f, -0.5f);
+        glEnd();
 
-int main(int argc, char** argv)
-{
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
-    glutInitWindowSize(1024, 768);
-    glutInitWindowPosition(0, 0);
-    glutCreateWindow("Tutorial 01");
-
-    InitializeGlutCallbacks();
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-    glutMainLoop();
-    
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+    glfwTerminate();
     return 0;
 }

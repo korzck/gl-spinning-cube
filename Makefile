@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-c -Wall
-LDLIBS=-lglut -lGL -lGLEW
+LDLIBS=-lglfw -lGL -lm -lX11 -lpthread -lXi -lXrandr -ldl
 OBJECTS=$(SOURCES:.cpp=.o)
 TARGET=$(shell basename `pwd`)
 SOURCES=$(wildcard *.cpp)
