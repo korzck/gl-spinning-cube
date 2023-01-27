@@ -77,7 +77,7 @@ int main()
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); 
 
     std::string vertexShader = 
-        "#version 330 core"
+        "#version 300 es\n"
         "\n"
         "layout(location = 0) in vec4 position;"
         "\n"
@@ -88,8 +88,8 @@ int main()
 
     
     std::string fragmentShader = 
-        "#version 330 core"
-        "\n"
+        "#version 300 es\n"
+        "precision mediump float;\n"
         "layout(location = 0) out vec4 color;"
         "\n"
         "void main()"
