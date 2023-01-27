@@ -72,10 +72,10 @@ int main()
     glewInit();
 
     std::cout << glGetString(GL_VERSION) << std::endl;
-
+    float n = 0.5f;
     float position[] = {
         -0.5f, -0.5f, 
-         0.5f, -0.5f,
+         n, -0.5f,
          0.5f,  0.5f,
         -0.5f,  0.5f 
     };
@@ -85,10 +85,14 @@ int main()
         2, 3, 0
     };
 
+    unsigned int vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
     unsigned int buffer;
     glGenBuffers(1, &buffer);
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), position, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), position, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); 
@@ -99,13 +103,26 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indeces, GL_STATIC_DRAW);
 
     unsigned int shader = createShader(loadShader("vertex.shader"), loadShader("fragment.shader"));
-    glUseProgram(shader);
 
+    unsigned int colorLocation = glGetUniformLocation(shader, "uColor");
+        glUseProgram(shader);
+
+    float r = 0.01f;
+    float red = 0.0f;
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
+        red+=r;
+        glUniform4f(colorLocation, red, 0.4f, 0.5f, 1.0f);
+
+        // glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        if (red > 1.0f)
+            r = -0.01f;
+        else if (red < 0.0f)
+            r = 0.01f;
 
         glfwSwapBuffers(window);
         glfwPollEvents();
