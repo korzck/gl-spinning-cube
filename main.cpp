@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cmath>
 #include "vertexBuffer.h"
 #include "indexBuffer.h"
 
@@ -83,8 +84,7 @@ int main()
     };
 
     unsigned int indeces [] = {
-        0, 1, 2,
-        3, 1, 2
+        0, 1, 2
     };
 
     unsigned int vao;
@@ -96,12 +96,13 @@ int main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); 
 
-    indexBuffer ib(indeces, 6);
+    indexBuffer ib(indeces, 3);
 
     unsigned int shader = createShader(loadShader("vertex.glsl"), loadShader("fragment.glsl"));
 
     unsigned int colorLocation = glGetUniformLocation(shader, "uColor");
-        glUseProgram(shader);
+    unsigned int scaleLocation = glGetUniformLocation(shader, "scale");
+    glUseProgram(shader);
 
     float r = 0.01f;
     float red = 0.0f;
@@ -111,6 +112,7 @@ int main()
 
         red+=r;
         glUniform4f(colorLocation, red, 0.4f, 0.5f, 1.0f);
+        glUniform1f(scaleLocation, sinf(red));
 
         ib.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
