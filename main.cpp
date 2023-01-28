@@ -84,12 +84,15 @@ int main()
     };
 
     unsigned int indeces [] = {
-        0, 1, 2
+        0, 3, 2
     };
-
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    float n = 0;
+    float moving[4][4];
+    moving[0][0] = 1.0f; moving[0][1] = 0.0f; moving[0][2] = 0.0f; moving[0][3] = n;
+    moving[1][0] = 0.0f; moving[1][1] = 1.0f; moving[1][2] = 0.0f; moving[1][3] = 0.0f;
+    moving[2][0] = 0.0f; moving[2][1] = 0.0f; moving[2][2] = 1.0f; moving[2][3] = 0.0f;
+    moving[3][0] = 0.0f; moving[3][1] = 0.0f; moving[3][2] = 0.0f; moving[3][3] = 1.0f;
+    
 
     vertexBuffer vb(position, 4 * 2 * sizeof(float));
 
@@ -102,26 +105,31 @@ int main()
 
     unsigned int colorLocation = glGetUniformLocation(shader, "uColor");
     unsigned int scaleLocation = glGetUniformLocation(shader, "scale");
+    unsigned int movingLocation = glGetUniformLocation(shader, "moving");
     glUseProgram(shader);
+    glUniform4f(colorLocation, 0.5f, 0.5f, 0.5f, 1.0f);
 
-    float r = 0.01f;
-    float red = 0.0f;
+    float increment = 0.01f;
+    float param = 0.0f;
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-
-        red+=r;
-        glUniform4f(colorLocation, red, 0.4f, 0.5f, 1.0f);
-        glUniform1f(scaleLocation, sinf(red));
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        n = sinf(param) - 0.5f;
+        // moving[0][3] = n;
+        glUniformMatrix4fv(movingLocation, 1, GL_TRUE, &moving[0][0]);
+        glUniform1f(scaleLocation, 4 * fabs(n));
+        
+        
 
         ib.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-        if (red > 1.0f)
-            r = -0.01f;
-        else if (red < 0.0f)
-            r = 0.01f;
-
+        param += increment;
+        if (param > 1.0f)
+            increment = -0.01f;
+        else if (param < 0.0f)
+            increment = 0.01f;
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
