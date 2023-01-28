@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "vertexBuffer.h"
+#include "indexBuffer.h"
 
 static std::string loadShader(const std::string& file)
 {
@@ -72,37 +74,31 @@ int main()
     glewInit();
 
     std::cout << glGetString(GL_VERSION) << std::endl;
-    float n = 0.5f;
+    
     float position[] = {
         -0.5f, -0.5f, 
-         n, -0.5f,
+         0.5f, -0.5f,
          0.5f,  0.5f,
         -0.5f,  0.5f 
     };
 
     unsigned int indeces [] = {
         0, 1, 2,
-        2, 3, 0
+        3, 1, 2
     };
 
     unsigned int vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), position, GL_STATIC_DRAW);
+    vertexBuffer vb(position, 4 * 2 * sizeof(float));
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); 
 
-    unsigned int ibo;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indeces, GL_STATIC_DRAW);
+    indexBuffer ib(indeces, 6);
 
-    unsigned int shader = createShader(loadShader("vertex.shader"), loadShader("fragment.shader"));
+    unsigned int shader = createShader(loadShader("vertex.glsl"), loadShader("fragment.glsl"));
 
     unsigned int colorLocation = glGetUniformLocation(shader, "uColor");
         glUseProgram(shader);
@@ -116,7 +112,7 @@ int main()
         red+=r;
         glUniform4f(colorLocation, red, 0.4f, 0.5f, 1.0f);
 
-        // glBindVertexArray(vao);
+        ib.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         if (red > 1.0f)
@@ -127,6 +123,7 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+    
     glfwTerminate();
     return 0;
 }
