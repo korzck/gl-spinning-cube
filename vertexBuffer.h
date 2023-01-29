@@ -6,6 +6,7 @@ class vertexBuffer
 private:
     unsigned int m_buffer;
 public:
+    vertexBuffer(){}
     vertexBuffer(void* data, unsigned int size)
     {
         glGenBuffers(1, &m_buffer);
@@ -15,6 +16,11 @@ public:
     ~vertexBuffer()
     {
         glDeleteBuffers(1, &m_buffer);
+    }
+    void operator=(vertexBuffer a)
+    {
+        this->m_buffer = a.m_buffer;
+        a.m_buffer = 0;
     }
     void bind() const
     {

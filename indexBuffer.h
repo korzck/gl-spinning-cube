@@ -7,6 +7,8 @@ private:
     unsigned int m_buffer;
     unsigned int m_count;
 public:
+    indexBuffer()
+    {}
     indexBuffer(unsigned int* data, unsigned int count) : m_count(count)
     {
         glGenBuffers(1, &m_buffer);
@@ -16,6 +18,11 @@ public:
     ~indexBuffer()
     {
         glDeleteBuffers(1, &m_buffer);
+    }
+    void operator=(indexBuffer a)
+    {
+        this->m_buffer = a.m_buffer;
+        a.m_buffer = 0;
     }
     void bind() const
     {
