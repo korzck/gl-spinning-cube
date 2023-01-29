@@ -3,9 +3,9 @@
 
 class vertexBuffer
 {
-private:
-    unsigned int m_buffer;
 public:
+    unsigned int m_buffer;
+
     vertexBuffer(){}
     vertexBuffer(void* data, unsigned int size)
     {

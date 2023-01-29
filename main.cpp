@@ -70,40 +70,48 @@ int main()
     unsigned int indeces [] = {
         0, 1, 2, 
         2, 3, 0,
+
         4, 5, 6,
         6, 7, 4,
+
         0, 4, 7,
         7, 3, 0,
-        3, 7, 6,
-        6, 2, 3,
-        5, 1, 2,
-        2, 6, 5,
-    };
-    unsigned int indeces2 [] = {
-        0, 1, 5, 5, 4, 0
+
+        1, 5, 6,
+        6, 2, 1,
+
+        2, 3, 7,
+        7, 6, 2,
+
+        0, 1, 5,
+        5, 4, 0
+        
     };
     
-    Shader shader(position, 24, indeces, 30, 3, "vertex.glsl", "fragment.glsl");
-    // Shader shader2(position, 24, indeces2, 6, 3, "vertex.glsl", "fragment.glsl");
+    Shader shader(position, 24, indeces, 36, 3, "vertex.glsl", "fragment.glsl");
+    
+    
+    
+    
+    glUseProgram(shader.getShader());    
+    
+
 
     unsigned int transformLocation = glGetUniformLocation(shader.getShader(), "transform");
     // unsigned int transformLocation2 = glGetUniformLocation(shader2.getShader(), "transform");
-
-    glUseProgram(shader.getShader());
-    // glUseProgram(shader2.getShader());
     float param = 0.0f;
     float inc = 1.0f;
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         param += inc;
-        rotate(0, 0, 0);
-        rotate(45, param, 45);
-        
+        rotate(0, param, 30);
         glUniformMatrix4fv(transformLocation, 1, GL_TRUE, &transform[0][0]);
-        // glUniformMatrix4fv(transformLocation2, 1, GL_TRUE, &rot[0][0]);
-        glDrawElements(GL_TRIANGLES, 128, GL_UNSIGNED_INT, nullptr);
+        // glUniformMatrix4fv(transformLocation2, 1, GL_TRUE, &transform[0][0]);
+
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

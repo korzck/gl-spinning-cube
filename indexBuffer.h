@@ -3,10 +3,9 @@
 
 class indexBuffer
 {
-private:
+public:
     unsigned int m_buffer;
     unsigned int m_count;
-public:
     indexBuffer()
     {}
     indexBuffer(unsigned int* data, unsigned int count) : m_count(count)

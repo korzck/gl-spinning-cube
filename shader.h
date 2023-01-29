@@ -68,8 +68,8 @@ public:
     {
         m_vb = vertexBuffer(points, pointsCount * sizeof(float));
 
-        glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, coordsSpan, GL_FLOAT, GL_FALSE, sizeof(float) * coordsSpan, 0); 
+        glEnableVertexAttribArray(0);
 
         m_ib = indexBuffer(indeces, indecesCount);
 

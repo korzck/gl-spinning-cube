@@ -3,6 +3,7 @@ precision mediump float;
 out vec4 color;
 in vec4 interpolatedColor;
 
+
 void main()
 {
    color = interpolatedColor;
