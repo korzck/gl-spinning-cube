@@ -89,16 +89,10 @@ int main()
     };
     
     Shader shader(position, 24, indeces, 36, 3, "vertex.glsl", "fragment.glsl");
-    
-    
-    
-    
+
     glUseProgram(shader.getShader());    
     
-
-
     unsigned int transformLocation = glGetUniformLocation(shader.getShader(), "transform");
-    // unsigned int transformLocation2 = glGetUniformLocation(shader2.getShader(), "transform");
     float param = 0.0f;
     float inc = 1.0f;
     while (!glfwWindowShouldClose(window))
